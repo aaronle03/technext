@@ -6,14 +6,14 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: 50px;
+    gap: 10px;
 }
 
 .filters {
     height: 100px;
     width: 1500px;
     background-color: #CCD0D8;
-    margin-top: 50px;
+    margin-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,8 +36,19 @@ button {
     cursor: pointer;
 }
 
+.infinite-scroll {
+    overflow-y: auto; /* Make the Infinite Scroll container scrollable */
+    flex-grow: 1; /* Allow it to take up remaining vertical space */
+}
+
 .main-section {
     height: 800px;
     width: 1500px;
     background-color: white;
+}
+
+.item-list {
+    max-height: 800px; /* Adjust the value as needed */
+    overflow-y: auto;
+    border: 1px solid #ccc; /* Optional: Add a border for better visual separation */
 }

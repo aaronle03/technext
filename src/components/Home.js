@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { debounce } from 'lodash';
 import './Home.css';
 
 const Home = () => {
@@ -9,12 +8,22 @@ const Home = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [noResults, setNoResults] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    const [pageNumber, setPageNumber] = useState(1);
 
-    const fetchDocs = async () => {
+    const fetchDocs = async (page) => {
         try {
-            const response = await axios.get('http://localhost:5000/api/documents');
-            setItems(response.data);
-            if (response.data.length < 10) {
+            const response = await axios.get(`http://localhost:5000/api/documents?page=${page}`);
+            const newItems = response.data;
+
+            // If it's the first page, set the items directly
+            if (page === 1) {
+                setItems(newItems);
+            } else {
+                // If it's not the first page, concatenate the new items to the existing ones
+                setItems((prevItems) => [...prevItems, ...newItems]);
+            }
+
+            if (newItems.length < 10) {
                 setHasMore(false);
             }
         } catch (error) {
@@ -22,26 +31,29 @@ const Home = () => {
         }
     };
 
-    const handleSearch = debounce(async () => {
+    const handleSearch = async () => {
         try {
             console.log(`Sending search request with query: ${searchTerm}`);
             const response = await axios.get(`http://localhost:5000/api/search?query=${searchTerm}`);
             console.log('Search response:', response.data);
             setItems(response.data);
             setNoResults(response.data.length === 0);
+            setHasMore(false); // Disable infinite scroll for search results
         } catch (error) {
             console.error('Error searching data: ', error);
         }
-    }, 500);
+    };
 
     const handleReset = async () => {
         setSearchTerm('');
-        fetchDocs();
+        setPageNumber(1);
+        setHasMore(true);
+        fetchDocs(1);
     };
-    
+
     useEffect(() => {
-        fetchDocs();
-    }, []);
+        fetchDocs(pageNumber);
+    }, [pageNumber]);
 
     return (
         <div className="home">
@@ -59,7 +71,7 @@ const Home = () => {
             </div>
             <InfiniteScroll
                 dataLength={items.length}
-                next={handleSearch}
+                next={() => setPageNumber(pageNumber + 1)}
                 hasMore={hasMore}
             ></InfiniteScroll>
             <div className="main-section">
@@ -76,7 +88,7 @@ const Home = () => {
                                 <p>Patent Text: {item.patent_text}</p>
                                 <p>Phase: {item.phase}</p>
                             </li>
-                        ))} 
+                        ))}
                     </ul>
                 )}
             </div>

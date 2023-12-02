@@ -33,8 +33,12 @@ const Home = () => {
             console.error('Error searching data: ', error);
         }
     }, 500);
-    
 
+    const handleReset = async () => {
+        setSearchTerm('');
+        fetchDocs();
+    };
+    
     useEffect(() => {
         fetchDocs();
     }, []);
@@ -51,6 +55,7 @@ const Home = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <button onClick={handleSearch}>Search</button>
+                <button onClick={handleReset}>Reset</button>
             </div>
             <InfiniteScroll
                 dataLength={items.length}
@@ -71,7 +76,7 @@ const Home = () => {
                                 <p>Patent Text: {item.patent_text}</p>
                                 <p>Phase: {item.phase}</p>
                             </li>
-                        ))}
+                        ))} 
                     </ul>
                 )}
             </div>

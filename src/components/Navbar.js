@@ -11,6 +11,7 @@ const Navbar = () => {
             </section>
           </section>
           <section className='navbar-links'>
+                <a href="/graph">GRAPH OF DATA</a>
                 <a href="https://www.linkedin.com/in/aaronctle/">CREATED BY AARON LE 🔥</a>
           </section>
           <section>

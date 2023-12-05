@@ -42,9 +42,13 @@ button {
 }
 
 .main-section {
-    height: 800px;
+    height: 1000px;
     width: 1500px;
     background-color: white;
+}
+
+.main-section p {
+    padding-left: 40px;
 }
 
 .item-list {

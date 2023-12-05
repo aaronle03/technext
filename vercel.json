@@ -1,8 +1,18 @@
 {
   "functions": {
-    "api/app.py": {
+    "api/main.py": {
       "runtime": "python3.8",
       "maxDuration": 5
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://technext-gl3x3800p-aaron-les-projects.vercel.app/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/$1"
+    }
+  ]
 }

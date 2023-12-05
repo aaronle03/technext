@@ -13,7 +13,7 @@ const Home = () => {
 
     const fetchDocs = async (page) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/documents?page=${page}`);
+            const response = await axios.get(`http://aaronle5621.pythonanywhere.com/api/documents?page=${page}`);
             const newItems = response.data;
 
             if (page === 1) {
@@ -45,7 +45,7 @@ const Home = () => {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/search?query=${searchTerm}`);
+            const response = await axios.get(`http://aaronle5621.pythonanywhere.com/api/search?query=${searchTerm}`);
             setItems(response.data);
             setNoResults(response.data.length === 0);
             setHasMore(false);

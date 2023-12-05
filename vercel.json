@@ -1,5 +1,8 @@
 {
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://technext-9jfb1hw75-aaron-les-projects.vercel.app//api/$1" }
-  ]
+  "functions": {
+    "api/app.py": {
+      "runtime": "python3.8",
+      "maxDuration": 5
+    }
+  }
 }

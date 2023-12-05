@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://technext-9jfb1hw75-aaron-les-projects.vercel.app//api/$1" }
+  ]
+}

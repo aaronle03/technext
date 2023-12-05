@@ -70,5 +70,10 @@ def search_api():
         return jsonify({"error": "Internal Server Error"}), 500
 
 
+@app.route("/api/hello")
+def hello():
+    return {"message": "Hello from Flask!"}
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)

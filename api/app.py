@@ -4,7 +4,15 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 
 app = Flask(__name__)
-CORS(app)
+
+cors = CORS(
+    app,
+    resources={
+        r"/api/*": {
+            "origins": ["https://technext-9fua3cfiu-aaron-les-projects.vercel.app"]
+        }
+    },
+)
 
 
 def convert_document(document):

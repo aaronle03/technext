@@ -9,47 +9,36 @@ const Home = () => {
     const [noResults, setNoResults] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [pageNumber, setPageNumber] = useState(1);
-    const [phaseCounts, setPhaseCounts] = useState({});
 
     const fetchDocs = async (page) => {
         try {
-            const response = await axios.get('https://aaronle5621.pythonanywhere.com/api/documents?page=1');
+            const response = await axios.get(`http://localhost:5000/api/documents?page=${page}`);
             const newItems = response.data;
 
+            // If it's the first page, set the items directly
             if (page === 1) {
                 setItems(newItems);
             } else {
+                // If it's not the first page, concatenate the new items to the existing ones
                 setItems((prevItems) => [...prevItems, ...newItems]);
             }
 
             if (newItems.length < 10) {
                 setHasMore(false);
             }
-
-            updatePhaseCounts(newItems);
         } catch (error) {
             console.error('Error fetching data: ', error);
         }
     };
 
-    const updatePhaseCounts = (newItems) => {
-        const newPhaseCounts = { ...phaseCounts };
-
-        newItems.forEach((item) => {
-            const phase = item.phase;
-            newPhaseCounts[phase] = (newPhaseCounts[phase] || 0) + 1;
-        });
-
-        setPhaseCounts(newPhaseCounts);
-    };
-
     const handleSearch = async () => {
         try {
-            const response = await axios.get('https://aaronle5621.pythonanywhere.com/api/documents?page=1');
+            console.log(`Sending search request with query: ${searchTerm}`);
+            const response = await axios.get(`http://localhost:5000/api/search?query=${searchTerm}`);
+            console.log('Search response:', response.data);
             setItems(response.data);
             setNoResults(response.data.length === 0);
-            setHasMore(false);
-            updatePhaseCounts(response.data);
+            setHasMore(false); // Disable infinite scroll for search results
         } catch (error) {
             console.error('Error searching data: ', error);
         }
@@ -59,7 +48,6 @@ const Home = () => {
         setSearchTerm('');
         setPageNumber(1);
         setHasMore(true);
-        setPhaseCounts({});
         fetchDocs(1);
     };
 
@@ -90,26 +78,18 @@ const Home = () => {
                 {noResults ? (
                     <p>No results found.</p>
                 ) : (
-                    <>
-                        <p>Phase Counts:</p>
-                        <ul>
-                            {Object.entries(phaseCounts).map(([phase, count]) => (
-                                <li key={phase}>{`Phase ${phase}: ${count}`}</li>
-                            ))}
-                        </ul>
-                        <ul className="item-list">
-                            {items.map((item) => (
-                                <li key={item._id}>
-                                    <h2>Item ID: {item._id}</h2>
-                                    <p>Date: {item.Date}</p>
-                                    <p>Index: {item.idx}</p>
-                                    <p>Patent ID: {item.patent_id}</p>
-                                    <p>Patent Text: {item.patent_text}</p>
-                                    <p>Phase: {item.phase}</p>
-                                </li>
-                            ))}
-                        </ul>
-                    </>
+                    <ul className="item-list">
+                        {items.map((item) => (
+                            <li key={item._id}>
+                                <h2>Item ID: {item._id}</h2>
+                                <p>Date: {item.Date}</p>
+                                <p>Index: {item.idx}</p>
+                                <p>Patent ID: {item.patent_id}</p>
+                                <p>Patent Text: {item.patent_text}</p>
+                                <p>Phase: {item.phase}</p>
+                            </li>
+                        ))}
+                    </ul>
                 )}
             </div>
         </div>
